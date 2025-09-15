@@ -1,0 +1,40 @@
+;; straight.el boostrap
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+             (bootstrap-version 6))
+               (unless (file-exists-p bootstrap-file)
+                   (with-current-buffer
+                           (url-retrieve-synchronously
+                                    "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+                                             'silent 'inhibit-cookies)
+                                                   (goto-char (point-max))
+                                                         (eval-print-last-sexp)))
+                                                           (load bootstrap-file nil 'nomessage))
+
+;; use-package configuration
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
+
+;; Copilot.el configuration
+(use-package copilot
+  :straight (copilot :type git :host github :repo "copilot-emacs/copilot.el")
+    :hook (prog-mode . copilot-mode)
+      :config
+        (define-key copilot-mode-map (kbd "C-TAB") #'copilot-accept-completion))
+
+
+;; Number lines
+(global-display-line-numbers-mode)
+;; Set default indentation for tab
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+;; Set python or a .py specific indetation
+(defun python-settings ()
+  "Set indentation to 4 spaces for python files "
+    (setq-local tab-width 4)
+      (setq-local python-indent-offset 4))
+      ;;add 4 spaces to python specific files/scripts
+      (add-hook 'python-mode-hook #'python-settings)
