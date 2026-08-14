@@ -113,16 +113,36 @@
 
 ;; Background color and transparency
 (add-to-list 'default-frame-alist '(background-color . "#282a36"))
-(add-to-list 'default-frame-alist '(alpha-background . 85))
-(add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+(add-to-list 'default-frame-alist '(alpha-background . 10))
+;; (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
 
 ;; Ensure background color is set
 (set-face-background 'default "#282a36")
 
-;; Set transparency for current frame
-(when (display-graphic-p)
-  (set-frame-parameter (selected-frame) 'alpha '(85 . 85)))
+;;==================================================================================
+;; commented section
 
+;; Set transparency for current frame
+;;(when (display-graphic-p)
+  ;;(set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+  ;;(add-to-list 'default-frame-alist '(background-color . "#282a36"))
+  ;;(set-face-background 'default "#282a36")
+  ;;(add-to-list 'default-frame-alist '(alpha-background . 70)))
+
+;; GUI-specific transparency
+(if (display-graphic-p)
+	(progn
+	  ;; This runs only when lauching normal GUI Emacs
+	  (add-to-list 'default-frame-alist '(background-color . "#282a36"))
+	  (set-face-background 'default "#282a36")
+	  (add-to-list 'default-frame-alist '(alpha-background . 70)))
+
+	  ;; This runs only when launching emacs -nw in the terminal
+  (progn
+	;; It strips the background color so the terminal canva stays transparent
+	(defun my-terminal-transparent-background ()
+	  (set-face-background 'default "unspecified-bg"))
+	(add-hook 'window-setup-hook #'my-terminal-transparent-background)))
 ;; ============================================================================
 ;; UTILITY FUNCTIONS
 ;; ============================================================================
