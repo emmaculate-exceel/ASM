@@ -111,6 +111,19 @@
 ;; Frame appearance settings
 (setq-default frame-background-mode 'dark)
 
+;; Force terminal mode to support 256/24-bit colors if available
+;;(unless (display-graphic-p)
+  ;;(setq xterm-xtra-capabilities '(getSelection setSelection))
+  ;; Force emacs to honor a dark background Spectrum
+  ;;(set-frame-parameter nill 'background-mode 'dark)
+  ;;(set-terminal-parameter nill 'background-mode 'dark))
+
+;;==============================================================================
+;; font color
+;;==============================================================================
+
+(global-font-lock-mode 1)
+
 ;; Background color and transparency
 (add-to-list 'default-frame-alist '(background-color . "#282a36"))
 (add-to-list 'default-frame-alist '(alpha-background . 10))
@@ -201,6 +214,32 @@
 ;; Syntax checking
 ;; (use-package flycheck
 ;;   :init (global-flycheck-mode))
+
+;; Install modern Tree-sitter syntax hightlighting engine
+(straight-use-package 'tree-sitter)
+(straight-use-package 'tree-sitter-langs)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+;; Install Web-Mode for HTML/CSS/JSX file colors
+(use-package web-mode
+  :mode ("\\.html?\\'" "\\.phtml\\'" "\\.tpl\\.php\\'" "\\.jsp\\'" "\\.as[cp]x\\'" "\\.erb\\'" "\\.mustache\\'" "\\.djhtml\\'")
+  :config
+  (setq web-mode-markup-indent-offset 2))
+;; Install markdown-Mode for README.md
+(use-package markdown-mode
+  :mode ("README\\.md\\'" . gfm-mode))
+
+;; Universal Syntax hightlighting Engine (Covers 40+ programming languages)
+(use-package tree-sitter
+  :straight t
+  :config
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-h1-mode))
+
+(use-package tree-sitter-langs
+  :straight t
+  :after tree-sitter)
 
 ;; ============================================================================
 ;; FINAL MESSAGE
